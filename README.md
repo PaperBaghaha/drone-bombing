@@ -1,16 +1,16 @@
-# Aerial Threat Detection
-# 🚀 Threat Intelligence System (DBMS Project)
+# Aerial Threat Detection (DBMS Project)
+# Threat Intelligence System 
 
-## 🎯 Overview
+## Overview
 This project is a **DBMS-based Threat Intelligence System** designed to simulate how aerial threats are detected, analyzed, and handled.
 
 It stores aerial object data, classifies threat levels, and generates alerts to support decision-making.
 
 ---
 
-## 🗃️ Database Structure
+## Database Structure
 
-### 📌 Tables
+### Tables
 1. **Aerial_Objects**
    - Stores detected aerial objects
 
@@ -25,14 +25,14 @@ It stores aerial object data, classifies threat levels, and generates alerts to 
 
 ---
 
-## 🔗 Relationships
+## Relationships
 - One object → many sensor records (**1:N**)
 - One object → one threat assessment (**1:1**)
 - One threat → many alerts (**1:N**)
 
 ---
 
-## ⚙️ Workflow
+## Workflow
 1. Aerial object is detected  
 2. Sensor data is recorded  
 3. Stored procedure evaluates threat  
@@ -41,7 +41,7 @@ It stores aerial object data, classifies threat levels, and generates alerts to 
 
 ---
 
-## 🧩 Features
+## Features
 
 ✔️ **Stored Procedure**
 - Automatically classifies threat level  
@@ -57,7 +57,7 @@ It stores aerial object data, classifies threat levels, and generates alerts to 
 
 ---
 
-## 🧠 Threat Classification Logic
+## Threat Classification Logic
 
 | Condition        | Threat Level |
 |----------------|-------------|
@@ -68,7 +68,7 @@ It stores aerial object data, classifies threat levels, and generates alerts to 
 
 ---
 
-## 🎯 Learning Outcomes
+## Learning Outcomes
 
 - Database design (PK, FK relationships)
 - SQL procedures and triggers
@@ -77,7 +77,7 @@ It stores aerial object data, classifies threat levels, and generates alerts to 
 
 ---
 
-## 🏆 Conclusion
+## Conclusion
 
 This project demonstrates how a **simplified defense-inspired system** can be built using DBMS to:
 - Organize structured data  
