@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Booting...</title>
+    <meta http-equiv="refresh" content="4;url=/defencepage" />
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --terminal-green: #4ade80;
+            --alert-red: #f87171;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: #050a05;
+        }
+
+        #boot-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #050a05;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .boot-line {
+            font-family: 'VT323', monospace;
+            font-size: 28px;
+            color: var(--terminal-green);
+            opacity: 0;
+            margin: 10px 0;
+        }
+
+        .line-1 { animation: typeLine 0.1s forwards 0.5s; }
+        .line-2 { animation: typeLine 0.1s forwards 1.2s; }
+        .line-3 { animation: typeLine 0.1s forwards 1.9s; }
+
+        .boot-title {
+            font-family: 'Silkscreen', cursive;
+            font-size: 52px;
+            color: var(--alert-red);
+            text-shadow: 4px 4px 0 #000;
+            opacity: 0;
+            margin: 30px 0;
+            text-align: center;
+            animation: typeLine 0.1s forwards 2.5s;
+        }
+
+        @keyframes typeLine {
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="boot-screen">
+        <p class="boot-line line-1">> INITIALIZING BASENODE...</p>
+        <p class="boot-line line-2">> ESTABLISHING SATELLITE UPLINK...</p>
+        <p class="boot-line line-3">> LOADING THREAT INTELLIGENCE SYSTEM...</p>
+        <h1 class="boot-title">AERIAL THREAT DETECTION  <br><span style="font-size: 24px; color: var(--terminal-green);">[ SYSTEM ONLINE ]</span></h1>
+    </div>
+</body>
+
+</html>

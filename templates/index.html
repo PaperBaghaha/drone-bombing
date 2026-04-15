@@ -255,6 +255,38 @@
             box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.3);
         }
 
+        .btn-small {
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            padding: 2px 8px;
+            border: 2px solid;
+            background: #0a0e0a;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.1s;
+            margin-right: 4px;
+        }
+
+        .btn-edit {
+            color: var(--warn-yellow);
+            border-color: var(--warn-yellow);
+        }
+
+        .btn-edit:hover {
+            background: rgba(250, 204, 21, 0.2);
+        }
+
+        .btn-delete {
+            color: var(--alert-red);
+            border-color: var(--alert-red);
+        }
+
+        .btn-delete:hover {
+            background: rgba(248, 113, 113, 0.2);
+        }
+
         .radar-blip {
             position: fixed;
             width: 12px;
@@ -264,16 +296,57 @@
             pointer-events: none;
         }
 
-        .blip-1 { top: 15%; left: 80%; animation: radarBlink 6s infinite 1s step-end; background-color: var(--warn-orange); box-shadow: 0 0 10px var(--warn-orange); }
-        .blip-2 { top: 60%; left: 10%; animation: radarBlink 4s infinite 2.5s step-end; background-color: var(--alert-red); box-shadow: 0 0 10px var(--alert-red); }
-        .blip-3 { top: 85%; left: 75%; animation: radarBlink 7s infinite 0.5s step-end; background-color: var(--terminal-green); box-shadow: 0 0 10px var(--terminal-green); }
-        .blip-4 { top: 30%; left: 25%; animation: radarBlink 5s infinite 3s step-end; background-color: var(--warn-yellow); box-shadow: 0 0 10px var(--warn-yellow); }
+        .blip-1 {
+            top: 15%;
+            left: 80%;
+            animation: radarBlink 6s infinite 1s step-end;
+            background-color: var(--warn-orange);
+            box-shadow: 0 0 10px var(--warn-orange);
+        }
+
+        .blip-2 {
+            top: 60%;
+            left: 10%;
+            animation: radarBlink 4s infinite 2.5s step-end;
+            background-color: var(--alert-red);
+            box-shadow: 0 0 10px var(--alert-red);
+        }
+
+        .blip-3 {
+            top: 85%;
+            left: 75%;
+            animation: radarBlink 7s infinite 0.5s step-end;
+            background-color: var(--terminal-green);
+            box-shadow: 0 0 10px var(--terminal-green);
+        }
+
+        .blip-4 {
+            top: 30%;
+            left: 25%;
+            animation: radarBlink 5s infinite 3s step-end;
+            background-color: var(--warn-yellow);
+            box-shadow: 0 0 10px var(--warn-yellow);
+        }
 
         @keyframes radarBlink {
-            0% { opacity: 0; transform: scale(1); }
-            5% { opacity: 1; transform: scale(1.5); }
-            10% { opacity: 0; transform: scale(1); }
-            100% { opacity: 0; }
+            0% {
+                opacity: 0;
+                transform: scale(1);
+            }
+
+            5% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+
+            10% {
+                opacity: 0;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -285,13 +358,13 @@
     <div class="radar-blip blip-2"></div>
     <div class="radar-blip blip-3"></div>
     <div class="radar-blip blip-4"></div>
-    
+
     <div class="container">
         <h1> Threat Detection Dashboard</h1>
 
         <div class="pixel-panel">
             <h2>> Add Aerial Object <span class="cursor"></span></h2>
-            <form method="POST" action="/add">
+            <form method="POST" action="/defencepage/add">
                 <input name="type" placeholder="TYPE (Missile/Drone/Aircraft)" required>
                 <input name="speed" type="number" placeholder="SPEED (km/h)" required>
                 <input name="altitude" type="number" placeholder="ALTITUDE (m)" required>
@@ -331,6 +404,7 @@
                     <th>Target ID</th>
                     <th>Threat Level</th>
                     <th>Priority Score</th>
+                    <th style="width: 140px;">Actions</th>
                 </tr>
                 {% for t in threats %}
                 <tr>
@@ -353,13 +427,22 @@
                                 </div>
                             </div>
                             <span
-                                style="font-family: 'Silkscreen', cursive; font-size: 16px; min-width: 45px;">{{t[3]}}/100</span>
+                                style="font-family: 'Silkscreen', cursive; font-size: 20px; min-width: 45px;">{{t[3]}}/100</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex; gap: 5px;">
+                            <a href="/defencepage/edit/{{ t[1] }}" class="btn-small btn-edit">EDIT</a>
+                            <form method="POST" action="/defencepage/delete/{{ t[1] }}" style="margin: 0; display: inline;">
+                                <button type="submit" class="btn-small btn-delete"
+                                    style="font-family: 'VT323', monospace; font-size: 20px; padding: 2px 8px; box-shadow: none;">DEL</button>
+                            </form>
                         </div>
                     </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="4" style="text-align: center; color: #4a5c40;">NO THREATS FOUND</td>
+                    <td colspan="5" style="text-align: center; color: #4a5c40;">NO THREATS FOUND</td>
                 </tr>
                 {% endfor %}
             </table>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Threat - Threat Detection System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --camo-base: #2c362a;
+            --terminal-green: #4ade80;
+            --alert-red: #f87171;
+            --warn-orange: #fb923c;
+            --warn-yellow: #facc15;
+            --border-width: 4px;
+        }
+
+        body {
+            font-family: 'VT323', monospace;
+            margin: 0;
+            padding: 40px;
+            background-color: var(--camo-base);
+            background-image:
+                linear-gradient(rgba(18, 23, 17, 0.85), rgba(18, 23, 17, 0.85)),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Crect width='32' height='32' fill='%232c362a'/%3E%3Crect x='0' y='8' width='8' height='8' fill='%233a4c3f'/%3E%3Crect x='8' y='0' width='16' height='8' fill='%233a4c3f'/%3E%3Crect x='16' y='16' width='8' height='8' fill='%233a4c3f'/%3E%3Crect x='24' y='24' width='8' height='8' fill='%233a4c3f'/%3E%3Crect x='0' y='24' width='8' height='8' fill='%2321291f'/%3E%3Crect x='8' y='16' width='8' height='16' fill='%2321291f'/%3E%3Crect x='24' y='8' width='8' height='8' fill='%2321291f'/%3E%3Crect x='16' y='8' width='8' height='8' fill='%234a3e2f'/%3E%3Crect x='24' y='16' width='8' height='8' fill='%234a3e2f'/%3E%3C/svg%3E");
+            background-size: auto, 128px 128px;
+            image-rendering: pixelated;
+            color: #e2e8f0;
+            font-size: 22px;
+            animation: scrollMap 4s linear infinite;
+        }
+
+        @keyframes scrollMap {
+            0% {
+                background-position: 0 0, 0 0;
+            }
+
+            100% {
+                background-position: 0 0, 0 128px;
+            }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pixel-panel {
+            background: #1e251c;
+            border: var(--border-width) solid #3f4d36;
+            box-shadow:
+                inset -4px -4px 0px rgba(0, 0, 0, 0.5),
+                inset 4px 4px 0px rgba(255, 255, 255, 0.1),
+                8px 8px 0px rgba(0, 0, 0, 0.7);
+            padding: 24px 32px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Silkscreen', cursive;
+            color: var(--alert-red);
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 36px;
+            text-shadow: 4px 4px 0px #000;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-family: 'Silkscreen', cursive;
+            color: var(--terminal-green);
+            margin-top: 0;
+            font-size: 20px;
+            text-shadow: 2px 2px 0px #000;
+            border-bottom: 4px solid #3a4c3f;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        input {
+            font-family: 'VT323', monospace;
+            background: #0a0e0a;
+            color: var(--terminal-green);
+            border: 4px solid #3f4d36;
+            padding: 12px 16px;
+            font-size: 20px;
+            flex: 1;
+            min-width: 200px;
+            box-shadow: inset 4px 4px 0px rgba(0, 0, 0, 0.8);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input::placeholder {
+            color: #4a5c40;
+        }
+
+        input:focus {
+            border-color: var(--terminal-green);
+        }
+
+        button {
+            font-family: 'Silkscreen', cursive;
+            background: var(--alert-red);
+            color: white;
+            border: 4px solid #8e1f1f;
+            padding: 14px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow:
+                inset -4px -4px 0px rgba(0, 0, 0, 0.3),
+                inset 4px 4px 0px rgba(255, 255, 255, 0.3);
+            transition: all 0.1s;
+        }
+
+        button:active {
+            box-shadow: inset 4px 4px 0px rgba(0, 0, 0, 0.5);
+            transform: translate(2px, 2px);
+        }
+
+        button:hover {
+            background: #fca5a5;
+            border-color: var(--alert-red);
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom,
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.15) 50%,
+                    rgba(0, 0, 0, 0.15));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 12px;
+            height: 20px;
+            background-color: var(--terminal-green);
+            vertical-align: middle;
+            animation: blink-cursor 1s step-end infinite;
+        }
+
+        @keyframes blink-cursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .radar-blip {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            opacity: 0;
+            z-index: 9998;
+            pointer-events: none;
+        }
+
+        .blip-1 { top: 15%; left: 80%; animation: radarBlink 6s infinite 1s step-end; background-color: var(--warn-orange); box-shadow: 0 0 10px var(--warn-orange); }
+        .blip-2 { top: 60%; left: 10%; animation: radarBlink 4s infinite 2.5s step-end; background-color: var(--alert-red); box-shadow: 0 0 10px var(--alert-red); }
+        .blip-3 { top: 85%; left: 75%; animation: radarBlink 7s infinite 0.5s step-end; background-color: var(--terminal-green); box-shadow: 0 0 10px var(--terminal-green); }
+        .blip-4 { top: 30%; left: 25%; animation: radarBlink 5s infinite 3s step-end; background-color: var(--warn-yellow); box-shadow: 0 0 10px var(--warn-yellow); }
+
+        @keyframes radarBlink {
+            0% { opacity: 0; transform: scale(1); }
+            5% { opacity: 1; transform: scale(1.5); }
+            10% { opacity: 0; transform: scale(1); }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scanlines"></div>
+    <div class="radar-blip blip-1"></div>
+    <div class="radar-blip blip-2"></div>
+    <div class="radar-blip blip-3"></div>
+    <div class="radar-blip blip-4"></div>
+    
+    <div class="container">
+        <h1> Threat Detection Dashboard</h1>
+
+        <div class="pixel-panel">
+            <h2>> Update Aerial Object <span class="cursor"></span></h2>
+            <form method="POST" action="/defencepage/update/{{ obj[0] }}">
+                <input name="type" placeholder="TYPE (Missile/Drone/Aircraft)" value="{{ obj[1] }}" required>
+                <input name="speed" type="number" placeholder="SPEED (km/h)" value="{{ obj[2] }}" required>
+                <input name="altitude" type="number" placeholder="ALTITUDE (m)" value="{{ obj[3] }}" required>
+                <button type="submit" style="background-color: var(--warn-orange); border-color: #c2410c;">Update Target</button>
+            </form>
+            <br><br>
+            <a href="/defencepage" style="color: var(--terminal-green); font-family: 'VT323', monospace; text-decoration: none; font-size: 20px;">[ <-- RETURN TO RADAR ]</a>
+        </div>
+    </div>
+</body>
+
+</html>
