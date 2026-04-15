@@ -1,129 +1,370 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
     <title>Threat Detection System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen&family=VT323&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --camo-base: #2c362a;
+            --terminal-green: #4ade80;
+            --alert-red: #f87171;
+            --warn-orange: #fb923c;
+            --warn-yellow: #facc15;
+            --border-width: 4px;
+        }
+
         body {
-            font-family: Arial;
-            margin: 40px;
-            background: #0f172a;
+            font-family: 'VT323', monospace;
+            margin: 0;
+            padding: 40px;
+            background-color: var(--camo-base);
+            background-image:
+                linear-gradient(rgba(18, 23, 17, 0.85), rgba(18, 23, 17, 0.85)),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Crect width='32' height='32' fill='%232c362a'/%3E%3Crect x='0' y='8' width='8' height='8' fill='%233a4c3f'/%3E%3Crect x='8' y='0' width='16' height='8' fill='%233a4c3f'/%3E%3Crect x='16' y='16' width='8' height='8' fill='%233a4c3f'/%3E%3Crect x='24' y='24' width='8' height='8' fill='%233a4c3f'/%3E%3Crect x='0' y='24' width='8' height='8' fill='%2321291f'/%3E%3Crect x='8' y='16' width='8' height='16' fill='%2321291f'/%3E%3Crect x='24' y='8' width='8' height='8' fill='%2321291f'/%3E%3Crect x='16' y='8' width='8' height='8' fill='%234a3e2f'/%3E%3Crect x='24' y='16' width='8' height='8' fill='%234a3e2f'/%3E%3C/svg%3E");
+            background-size: auto, 128px 128px;
+            image-rendering: pixelated;
             color: #e2e8f0;
+            font-size: 22px;
+            animation: scrollMap 4s linear infinite;
+        }
+
+        @keyframes scrollMap {
+            0% {
+                background-position: 0 0, 0 0;
+            }
+
+            100% {
+                background-position: 0 0, 0 128px;
+            }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pixel-panel {
+            background: #1e251c;
+            border: var(--border-width) solid #3f4d36;
+            box-shadow:
+                inset -4px -4px 0px rgba(0, 0, 0, 0.5),
+                inset 4px 4px 0px rgba(255, 255, 255, 0.1),
+                8px 8px 0px rgba(0, 0, 0, 0.7);
+            padding: 24px 32px;
+            margin-bottom: 40px;
+            position: relative;
         }
 
         h1 {
-            color: #f87171;
+            font-family: 'Silkscreen', cursive;
+            color: var(--alert-red);
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 36px;
+            text-shadow: 4px 4px 0px #000;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
         }
 
-        input, button {
-            margin: 5px;
-            padding: 10px;
-            border-radius: 6px;
-            border: none;
+        h2 {
+            font-family: 'Silkscreen', cursive;
+            color: var(--terminal-green);
+            margin-top: 0;
+            font-size: 20px;
+            text-shadow: 2px 2px 0px #000;
+            border-bottom: 4px solid #3a4c3f;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 10px;
         }
 
         input {
-            background: #1e293b;
-            color: white;
+            font-family: 'VT323', monospace;
+            background: #0a0e0a;
+            color: var(--terminal-green);
+            border: 4px solid #3f4d36;
+            padding: 12px 16px;
+            font-size: 20px;
+            flex: 1;
+            min-width: 200px;
+            box-shadow: inset 4px 4px 0px rgba(0, 0, 0, 0.8);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input::placeholder {
+            color: #4a5c40;
+        }
+
+        input:focus {
+            border-color: var(--terminal-green);
         }
 
         button {
-            background: #ef4444;
+            font-family: 'Silkscreen', cursive;
+            background: var(--alert-red);
             color: white;
+            border: 4px solid #8e1f1f;
+            padding: 14px 24px;
+            font-size: 16px;
             cursor: pointer;
+            text-transform: uppercase;
+            box-shadow:
+                inset -4px -4px 0px rgba(0, 0, 0, 0.3),
+                inset 4px 4px 0px rgba(255, 255, 255, 0.3);
+            transition: all 0.1s;
+        }
+
+        button:active {
+            box-shadow: inset 4px 4px 0px rgba(0, 0, 0, 0.5);
+            transform: translate(2px, 2px);
         }
 
         button:hover {
-            background: #dc2626;
+            background: #fca5a5;
+            border-color: var(--alert-red);
         }
 
         table {
             border-collapse: collapse;
             width: 100%;
-            margin-top: 20px;
-            background: #1e293b;
+            margin-top: 15px;
+            background: #0a0e0a;
+            border: 4px solid #3f4d36;
+            box-shadow: inset 4px 4px 0px rgba(0, 0, 0, 0.8);
         }
 
-        td, th {
-            border: 1px solid #334155;
-            padding: 10px;
-            text-align: center;
+        th,
+        td {
+            border-bottom: 2px solid #2a3525;
+            padding: 14px 16px;
+            text-align: left;
         }
 
         th {
-            background: #334155;
+            background: #151b14;
+            color: #8b9d80;
+            font-family: 'Silkscreen', cursive;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .critical { color: red; font-weight: bold; }
-        .high { color: orange; }
-        .medium { color: yellow; }
-        .low { color: lightgreen; }
+        td {
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        tr:nth-child(even) {
+            background: rgba(42, 53, 37, 0.3);
+        }
+
+        tr:hover {
+            background: rgba(74, 222, 128, 0.05);
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom,
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.15) 50%,
+                    rgba(0, 0, 0, 0.15));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .critical {
+            color: var(--alert-red);
+            animation: blink 1s infinite;
+            font-weight: bold;
+        }
+
+        .high {
+            color: var(--warn-orange);
+        }
+
+        .medium {
+            color: var(--warn-yellow);
+        }
+
+        .low {
+            color: var(--terminal-green);
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+                text-shadow: 0 0 8px var(--alert-red);
+            }
+
+            50% {
+                opacity: 0.5;
+                text-shadow: none;
+            }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 12px;
+            height: 20px;
+            background-color: var(--terminal-green);
+            vertical-align: middle;
+            animation: blink-cursor 1s step-end infinite;
+        }
+
+        @keyframes blink-cursor {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .progress-bg {
+            height: 16px;
+            background: #0a0e0a;
+            border: 4px solid #3f4d36;
+            flex: 1;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--alert-red);
+            box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .radar-blip {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            opacity: 0;
+            z-index: 9998;
+            pointer-events: none;
+        }
+
+        .blip-1 { top: 15%; left: 80%; animation: radarBlink 6s infinite 1s step-end; background-color: var(--warn-orange); box-shadow: 0 0 10px var(--warn-orange); }
+        .blip-2 { top: 60%; left: 10%; animation: radarBlink 4s infinite 2.5s step-end; background-color: var(--alert-red); box-shadow: 0 0 10px var(--alert-red); }
+        .blip-3 { top: 85%; left: 75%; animation: radarBlink 7s infinite 0.5s step-end; background-color: var(--terminal-green); box-shadow: 0 0 10px var(--terminal-green); }
+        .blip-4 { top: 30%; left: 25%; animation: radarBlink 5s infinite 3s step-end; background-color: var(--warn-yellow); box-shadow: 0 0 10px var(--warn-yellow); }
+
+        @keyframes radarBlink {
+            0% { opacity: 0; transform: scale(1); }
+            5% { opacity: 1; transform: scale(1.5); }
+            10% { opacity: 0; transform: scale(1); }
+            100% { opacity: 0; }
+        }
     </style>
 </head>
 
 <body>
+    <div class="scanlines"></div>
+    <!-- Radar pixel blips -->
+    <div class="radar-blip blip-1"></div>
+    <div class="radar-blip blip-2"></div>
+    <div class="radar-blip blip-3"></div>
+    <div class="radar-blip blip-4"></div>
+    
+    <div class="container">
+        <h1> Threat Detection Dashboard</h1>
 
-<h1>🚨 Threat Detection Dashboard</h1>
+        <div class="pixel-panel">
+            <h2>> Add Aerial Object <span class="cursor"></span></h2>
+            <form method="POST" action="/add">
+                <input name="type" placeholder="TYPE (Missile/Drone/Aircraft)" required>
+                <input name="speed" type="number" placeholder="SPEED (km/h)" required>
+                <input name="altitude" type="number" placeholder="ALTITUDE (m)" required>
+                <button type="submit">Deploy Target</button>
+            </form>
+        </div>
 
-<!-- FORM -->
-<h2>Add Aerial Object</h2>
-<form method="POST" action="/add">
-    <input name="type" placeholder="Type (Missile/Drone/Aircraft)" required>
-    <input name="speed" type="number" placeholder="Speed" required>
-    <input name="altitude" type="number" placeholder="Altitude" required>
-    <button type="submit">Add Object</button>
-</form>
+        <div class="pixel-panel">
+            <h2>> System Alerts</h2>
+            <table>
+                <tr>
+                    <th>Alert ID</th>
+                    <th>Object ID</th>
+                    <th>Encrypted Message</th>
+                    <th>Timestamp</th>
+                </tr>
+                {% for a in alerts %}
+                <tr>
+                    <td>#{{ "%04d" % a[0] }}</td>
+                    <td>OBJ-{{a[1]}}</td>
+                    <td>{{a[2]}}</td>
+                    <td style="color: #8b9d80;">{{a[3]}}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: #4a5c40;">NO ALERTS DETECTED</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
 
-<!-- ALERTS -->
-<h2>🚨 Alerts</h2>
-<table>
-<tr>
-    <th>ID</th>
-    <th>Object ID</th>
-    <th>Message</th>
-    <th>Time</th>
-</tr>
-
-{% for a in alerts %}
-<tr>
-    <td>{{a[0]}}</td>
-    <td>{{a[1]}}</td>
-    <td>{{a[2]}}</td>
-    <td>{{a[3]}}</td>
-</tr>
-{% endfor %}
-
-</table>
-
-<!-- THREATS -->
-<h2>📊 Threat Assessments</h2>
-<table>
-<tr>
-    <th>ID</th>
-    <th>Object ID</th>
-    <th>Threat Level</th>
-    <th>Priority</th>
-</tr>
-
-{% for t in threats %}
-<tr>
-    <td>{{t[0]}}</td>
-    <td>{{t[1]}}</td>
-
-    <td class="
-        {% if t[2]=='CRITICAL' %}critical
-        {% elif t[2]=='HIGH' %}high
-        {% elif t[2]=='MEDIUM' %}medium
-        {% else %}low
-        {% endif %}
-    ">
-        {{t[2]}}
-    </td>
-
-    <td>{{t[3]}}</td>
-</tr>
-{% endfor %}
-
-</table>
-
+        <div class="pixel-panel">
+            <h2>> Threat Assessment Radar</h2>
+            <table>
+                <tr>
+                    <th>Report ID</th>
+                    <th>Target ID</th>
+                    <th>Threat Level</th>
+                    <th>Priority Score</th>
+                </tr>
+                {% for t in threats %}
+                <tr>
+                    <td>#{{ "%04d" % t[0] }}</td>
+                    <td>OBJ-{{t[1]}}</td>
+                    <td class="
+                        {% if t[2]=='CRITICAL' %}critical
+                        {% elif t[2]=='HIGH' %}high
+                        {% elif t[2]=='MEDIUM' %}medium
+                        {% else %}low
+                        {% endif %}
+                    ">
+                        [{{t[2]}}]
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="progress-bg">
+                                <div class="progress-fill"
+                                    style="width: {{ t[3] }}%; background: {% if t[3] >= 80 %}var(--alert-red){% elif t[3] >= 50 %}var(--warn-orange){% else %}var(--warn-yellow){% endif %};">
+                                </div>
+                            </div>
+                            <span
+                                style="font-family: 'Silkscreen', cursive; font-size: 16px; min-width: 45px;">{{t[3]}}/100</span>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: #4a5c40;">NO THREATS FOUND</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 </body>
+
 </html>

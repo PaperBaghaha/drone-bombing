@@ -8,6 +8,39 @@ It stores aerial object data, classifies threat levels, and generates alerts to 
 
 ---
 
+## Getting Started (Run Locally)
+
+Follow these simple steps to install the required dependencies and start the app on your machine.
+
+### 1. Prerequisites
+Ensure you have **Python 3.x** installed. You can download it from [python.org](https://www.python.org/).
+
+### 2. Setup & Installation
+Open your terminal/command prompt in the `drone-bombing` directory and run:
+
+```bash
+# Optional: Create a virtual environment
+python -m venv venv
+venv\Scripts\activate   # For Windows
+# source venv/bin/activate # For Mac/Linux
+
+# Install Flask (Web Framework)
+pip install flask
+```
+
+### 3. Run the System
+Start the application by running the main Python file:
+
+```bash
+python app.py
+```
+
+### 4. View the App
+Open your web browser and navigate to:
+**http://127.0.0.1:5000/**
+
+---
+
 ## Database Structure
 
 ### Tables
