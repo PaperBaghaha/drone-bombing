@@ -363,6 +363,17 @@
         <h1> Threat Detection Dashboard</h1>
 
         <div class="pixel-panel">
+            <h2>> Query Global Database <span class="cursor"></span></h2>
+            <form method="GET" action="/defencepage">
+                <input name="search" placeholder="SEARCH DATABASE (ID, Threat Level, Message...)" value="{{ search }}" style="width: 70%;">
+                <button type="submit" style="background-color: var(--warn-orange); border-color: #c2410c;">SCAN</button>
+                {% if search %}
+                    <a href="/defencepage" class="btn-small" style="padding: 12px 24px; font-size: 18px; margin-left: 10px; color: var(--terminal-green); border-color: var(--terminal-green); text-decoration: none;">CLEAR</a>
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="pixel-panel">
             <h2>> Add Aerial Object <span class="cursor"></span></h2>
             <form method="POST" action="/defencepage/add">
                 <input name="type" placeholder="TYPE (Missile/Drone/Aircraft)" required>
@@ -443,6 +454,32 @@
                 {% else %}
                 <tr>
                     <td colspan="5" style="text-align: center; color: #4a5c40;">NO THREATS FOUND</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="pixel-panel">
+            <h2>> Automated Security Audit Log</h2>
+            <table>
+                <tr>
+                    <th>Log ID</th>
+                    <th>Target ID</th>
+                    <th>System Action</th>
+                    <th>Encrypted Details</th>
+                    <th>Timestamp</th>
+                </tr>
+                {% for log in audit_logs %}
+                <tr>
+                    <td>#{{ "%04d" % log[0] }}</td>
+                    <td>OBJ-{{log[1]}}</td>
+                    <td style="color: {% if log[2]=='DELETE' %}var(--alert-red){% else %}var(--warn-yellow){% endif %}; font-weight: bold;">[{{log[2]}}]</td>
+                    <td style="font-size: 18px; color: #a3b899; word-break: break-all;">{{log[3]}}</td>
+                    <td style="font-size: 18px; color: #8b9d80;">{{log[4]}}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: #4a5c40;">NO AUDIT TRAILS DETECTED</td>
                 </tr>
                 {% endfor %}
             </table>

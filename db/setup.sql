@@ -58,3 +58,28 @@ BEGIN
         END
     );
 END;
+
+-- Audit Logging Table
+CREATE TABLE IF NOT EXISTS Audit_Log (
+    log_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    object_id INTEGER,
+    action TEXT,
+    details TEXT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Trigger: Audit Updates
+CREATE TRIGGER IF NOT EXISTS audit_update_aerial_objects
+AFTER UPDATE ON Aerial_Objects
+BEGIN
+    INSERT INTO Audit_Log (object_id, action, details)
+    VALUES (NEW.object_id, 'UPDATE', 'Object updated. Speed: ' || OLD.speed || ' -> ' || NEW.speed || ', Altitude: ' || OLD.altitude || ' -> ' || NEW.altitude);
+END;
+
+-- Trigger: Audit Deletes
+CREATE TRIGGER IF NOT EXISTS audit_delete_aerial_objects
+AFTER DELETE ON Aerial_Objects
+BEGIN
+    INSERT INTO Audit_Log (object_id, action, details)
+    VALUES (OLD.object_id, 'DELETE', 'Object deleted: Type: ' || OLD.type || ', Speed: ' || OLD.speed);
+END;
