@@ -1,7 +1,7 @@
 # Aerial Threat Detection System
 
 ## Overview
-This project is an advanced **DBMS-based Threat Intelligence System** designed to simulate real-time telemetry processing, threat classification, and alert handling for aerial objects. Built around relational database paradigms, it relies heavily on event-driven SQL architecture (Triggers, Condition Logic) to process raw data and cascade actionable intelligence to a tactical radar dashboard.
+This project is an advanced **DBMS-based Threat System** designed to simulate real-time telemetry processing, threat classification, and alert handling for aerial objects. Built around relational database paradigms, it relies heavily on event-driven SQL architecture (Triggers, Condition Logic) to process raw data and cascade actionable intelligence to a tactical radar dashboard.
 
 ---
 
