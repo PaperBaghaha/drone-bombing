@@ -44,7 +44,7 @@ python app.py
 ### 4. Access the Dashboard
 Open your web browser and navigate directly to the application boot sequence:
 **http://127.0.0.1:5000/**
-*(You will be securely routed through the `/` bootnode directly into the `/defencepage` tactical overview).*
+*(You will be securely routed through the `/` bootnode directly into the `/defencepage/login` authorization portal).*
 
 ---
 
@@ -93,11 +93,12 @@ Immediately queues alerts in a secondary workflow if the aforementioned table de
 
 ## Application Workflows & Features
 
-1. **Bootnode Routing (`/`)**: Intercepts initial requests, supplying a 4-second Terminal CSS boot sequence masking system "loading" before establishing a dynamic redirect to the core dashboard.
-2. **Dashboard Overview (`/defencepage`)**: Employs Python string formatting (`%04d` ID padding) and dynamic Jinja loops to iterate over reverse-chronological SQL cursors. Employs mathematically scaled, color-shifting healthbars derived directly from the SQL `priority_score`.
-3. **Target Deployment (`/defencepage/add`)**: Provides front-facing forms interfacing securely with POST routes to inject data directly into `Aerial_Objects`, igniting the SQL trigger chain.
-4. **Data Manipulation (`/defencepage/edit/<id>`)**: Fetches singletons against the PK and loads them into a targeted `edit.html` interface. Running custom Python recalculations to mimic SQL conditions, forcefully syncing the `Threat_Assessment` table state back into alignment before updating.
-5. **Entity Deletion (`/defencepage/delete/<id>`)**: Enforces manual referential drop procedures, cleansing the `Aerial_Objects`, `Threat_Assessment`, and `Alerts` tables simultaneously per primary key, managing storage state and preventing ghost alerts.
+1. **Bootnode Routing (`/`)**: Intercepts initial requests, supplying a 7-second Terminal CSS boot sequence masking system "loading" before establishing a dynamic redirect to the login authorization portal.
+2. **Authorization Portal (`/defencepage/login`)**: A secure authentication layer requiring Operative ID, Passcode, and Clearance Level (Analyst, Commander, General) before granting access to the tactical dashboard.
+3. **Dashboard Overview (`/defencepage`)**: Employs Python string formatting (`%04d` ID padding) and dynamic Jinja loops to iterate over reverse-chronological SQL cursors. Employs mathematically scaled, color-shifting healthbars derived directly from the SQL `priority_score`.
+4. **Target Deployment (`/defencepage/add`)**: Provides front-facing forms interfacing securely with POST routes to inject data directly into `Aerial_Objects`, igniting the SQL trigger chain.
+5. **Data Manipulation (`/defencepage/edit/<id>`)**: Fetches singletons against the PK and loads them into a targeted `edit.html` interface. Running custom Python recalculations to mimic SQL conditions, forcefully syncing the `Threat_Assessment` table state back into alignment before updating.
+6. **Entity Deletion (`/defencepage/delete/<id>`)**: Enforces manual referential drop procedures, cleansing the `Aerial_Objects`, `Threat_Assessment`, and `Alerts` tables simultaneously per primary key, managing storage state and preventing ghost alerts.
 
 ---
 

@@ -24,6 +24,14 @@ def intro():
     return render_template("intro.html")
 
 
+@app.route("/defencepage/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        # Allowing anything as requested, and redirecting straight to dashboard
+        return redirect("/defencepage")
+    return render_template("login.html")
+
+
 @app.route("/defencepage")
 def index():
     conn = get_conn()
