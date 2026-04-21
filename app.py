@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, flash
 import sqlite3
 app = Flask(__name__)
+app.secret_key = 'super_secret_threat_key'
 def get_conn():
     return sqlite3.connect("database.db")
 def setup_database():
@@ -18,10 +19,42 @@ def intro():
 @app.route("/defencepage/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
+        session['username'] = request.form.get('username')
+        session['role'] = request.form.get('rank')
         return redirect("/defencepage")
     return render_template("login.html")
+
+@app.route("/defencepage/login/create", methods=["GET", "POST"])
+def create_user():
+    if request.method == "POST":
+        username = request.form.get("username")
+        passwd = request.form.get("passwd")
+        role = request.form.get("role")
+        access_key = request.form.get("access_key")
+        
+        if access_key != "maverick21":
+            flash("INVALID ACCESS KEY")
+            return redirect("/defencepage/login/create")
+            
+        conn = get_conn()
+        cur = conn.cursor()
+        try:
+            cur.execute("INSERT INTO Users (username, password, role) VALUES (?, ?, ?)", (username, passwd, role))
+        except sqlite3.IntegrityError:
+            flash("USER ALREADY EXISTS")
+            return redirect("/defencepage/login/create")
+        finally:
+            conn.commit()
+            conn.close()
+            
+        return redirect("/defencepage/login")
+        
+    return render_template("register.html")
+
 @app.route("/defencepage")
 def index():
+    if 'role' not in session:
+        return redirect("/defencepage/login")
     conn = get_conn()
     cur = conn.cursor()
 
@@ -41,6 +74,8 @@ def index():
     )
 @app.route("/defencepage/dbs")
 def view_database():
+    if 'role' not in session:
+        return redirect("/defencepage/login")
     conn = get_conn()
     cur = conn.cursor()
     
@@ -63,6 +98,9 @@ def view_database():
 
 @app.route("/defencepage/add", methods=["POST"])
 def add():
+    if session.get('role') not in ['general', 'commander']:
+        flash("UNAUTHORIZED: Clearance level insufficient to add targets.")
+        return redirect("/defencepage")
     obj_type = request.form["type"]
     speed = int(request.form["speed"])
     altitude = int(request.form["altitude"])
@@ -83,6 +121,9 @@ def add():
 
 @app.route("/defencepage/delete/<int:id>", methods=["POST"])
 def delete_record(id):
+    if session.get('role') != 'general':
+        flash("UNAUTHORIZED: Only GENERAL rank can delete records.")
+        return redirect("/defencepage")
     conn = get_conn()
     cur = conn.cursor()
     cur.execute("DELETE FROM Aerial_Objects WHERE object_id = ?", (id,))
@@ -95,6 +136,9 @@ def delete_record(id):
 
 @app.route("/defencepage/edit/<int:id>")
 def edit(id):
+    if session.get('role') not in ['general', 'commander']:
+        flash("UNAUTHORIZED: Clearance level insufficient to edit targets.")
+        return redirect("/defencepage")
     conn = get_conn()
     cur = conn.cursor()
     obj = cur.execute("SELECT * FROM Aerial_Objects WHERE object_id = ?", (id,)).fetchone()
@@ -106,6 +150,9 @@ def edit(id):
 
 @app.route("/defencepage/update/<int:id>", methods=["POST"])
 def update(id):
+    if session.get('role') not in ['general', 'commander']:
+        flash("UNAUTHORIZED: Clearance level insufficient to update targets.")
+        return redirect("/defencepage")
     obj_type = request.form["type"]
     speed = int(request.form["speed"])
     altitude = int(request.form["altitude"])

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>System Login - Threat Detection</title>
+    <title>System Registration - Threat Detection</title>
     <link href="https://fonts.googleapis.com/css2?family=Silkscreen&family=VT323&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -169,14 +169,22 @@
     <div class="scanlines"></div>
     <div class="container">
         <div class="pixel-panel">
-            <h1>AUTHENTICATION</h1>
-            <h2>> ENTER CREDENTIALS <span class="cursor"></span></h2>
-            <form method="POST" action="/defencepage/login">
+            <h1>REGISTRATION</h1>
+            <h2>> CREATE NEW OPERATIVE <span class="cursor"></span></h2>
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% for msg in messages %}
+                  <p style="color: var(--warn-yellow); font-size: 18px; margin-top: 0;">{{ msg }}</p>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+            <form method="POST" action="/defencepage/login/create">
                 <input type="text" name="username" placeholder="OPERATIVE ID" required>
-                <input type="password" name="password" placeholder="PASSCODE" required>
+                <input type="password" name="passwd" placeholder="PASSCODE" required>
+                <input type="password" name="access_key" placeholder="ACCESS KEY" required>
                 
                 <div class="select-wrapper">
-                    <select name="rank" required>
+                    <select name="role" required>
                         <option value="" disabled selected>SELECT CLEARANCE LEVEL</option>
                         <option value="analyst">ANALYST [L1]</option>
                         <option value="commander">COMMANDER [L2]</option>
@@ -184,12 +192,12 @@
                     </select>
                 </div>
                 
-                <button type="submit">AUTHORIZE ACCESS</button>
+                <button type="submit">REGISTER OPERATIVE</button>
             </form>
+            <div style="margin-top: 20px;">
+                <a href="/defencepage/login" style="color: #8b9d80; text-decoration: none; font-size: 18px;">[ <-- RETURN TO LOGIN ]</a>
+            </div>
         </div>
     </div>
-
-    <!-- Create User Access Button -->
-    <a href="/defencepage/login/create" style="position: fixed; bottom: 20px; right: 20px; color: #8b9d80; font-family: 'VT323', monospace; text-decoration: none; font-size: 24px; text-shadow: 2px 2px 0px #000; transition: color 0.1s;" onmouseover="this.style.color='var(--terminal-green)'" onmouseout="this.style.color='#8b9d80'">[ CREATE USER ]</a>
 </body>
 </html>
