@@ -368,10 +368,20 @@
             </div>
         </div>
 
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="pixel-panel flash-message" style="border-color: var(--alert-red); margin-bottom: 40px; padding: 15px; text-align: center; box-shadow: inset 4px 4px 0px rgba(0, 0, 0, 0.5), inset -4px -4px 0px rgba(255, 255, 255, 0.1), 8px 8px 0px rgba(0, 0, 0, 0.7); background: #2c1111;">
+                <h2 style="color: var(--alert-red); margin-bottom: 0; border: none; font-size: 24px; text-shadow: 2px 2px 0px #000;">[!] {{ message }}</h2>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
         <div class="pixel-panel">
             <h2>> Database Controls <span class="cursor"></span></h2>
             <a href="/defencepage/dbs" class="btn-small" style="padding: 12px 24px; font-size: 18px; color: white; border-color: #3f4d36; background: #2c362a; text-decoration: none; box-shadow: inset -2px -2px 0px rgba(0,0,0,0.5);">VIEW DATABASE</a>
-    </div>
+        </div>
 
         <div class="pixel-panel">
             <h2>> Add Aerial Object <span class="cursor"></span></h2>

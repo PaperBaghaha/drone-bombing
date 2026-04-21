@@ -125,6 +125,10 @@ def view_database():
 @app.route("/defencepage/add", methods=["POST"])
 @login_required
 def add():
+    if session.get('role') == 'analyst':
+        flash('ACCESS DENIED: Analysts are restricted to view-only access.', 'error')
+        return redirect("/defencepage")
+        
     obj_type = request.form["type"]
     speed = int(request.form["speed"])
     altitude = int(request.form["altitude"])
@@ -146,6 +150,11 @@ def add():
 @app.route("/defencepage/delete/<int:id>", methods=["POST"])
 @login_required
 def delete_record(id):
+    role = session.get('role')
+    if role in ['analyst', 'commander']:
+        flash('ACCESS DENIED: Only Generals have authorization to delete records.', 'error')
+        return redirect("/defencepage")
+        
     conn = get_conn()
     cur = conn.cursor()
     cur.execute("DELETE FROM Aerial_Objects WHERE object_id = ?", (id,))
@@ -159,6 +168,10 @@ def delete_record(id):
 @app.route("/defencepage/edit/<int:id>")
 @login_required
 def edit(id):
+    if session.get('role') == 'analyst':
+        flash('ACCESS DENIED: Analysts are restricted to view-only access.', 'error')
+        return redirect("/defencepage")
+        
     conn = get_conn()
     cur = conn.cursor()
     obj = cur.execute("SELECT * FROM Aerial_Objects WHERE object_id = ?", (id,)).fetchone()
@@ -171,6 +184,10 @@ def edit(id):
 @app.route("/defencepage/update/<int:id>", methods=["POST"])
 @login_required
 def update(id):
+    if session.get('role') == 'analyst':
+        flash('ACCESS DENIED: Analysts are restricted to view-only access.', 'error')
+        return redirect("/defencepage")
+        
     obj_type = request.form["type"]
     speed = int(request.form["speed"])
     altitude = int(request.form["altitude"])
